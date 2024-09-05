@@ -10,7 +10,7 @@ services:
       - "3100:3100"
     volumes:
       - /root/promtailloki/loki:/etc/loki
-    command: -config.file=/etc/loki/loki-config.yaml
+    command: -config.file=/etc/loki/loki-config.yml
     networks:
       - loki
 
