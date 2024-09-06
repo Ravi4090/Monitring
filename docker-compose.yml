@@ -7,6 +7,7 @@ networks:
 services:
   loki:
     image: grafana/loki:latest
+    container_name: loki
     ports:
       - "3100:3100"
     volumes:
@@ -17,6 +18,7 @@ services:
 
   promtail:
     image: grafana/promtail:latest
+    container_name: promtail
     volumes:
       - /var/log:/var/log
       - ./promtail:/etc/promtail 
@@ -26,15 +28,26 @@ services:
 
   grafana:
     image: grafana/grafana:latest
+    container_name: grafana
     ports:
       - "3000:3000"
     volumes:
       - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
     networks:
       - monitoring
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    platform: linux/amd64
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor-amd64:v0.50.0
+    container_name: cadvisor
     platform: linux/amd64
     hostname: cadvisor
     volumes:
