@@ -4,6 +4,14 @@ networks:
   monitoring:
     driver: bridge
 
+volumes:
+  grafana_data:
+    driver: local  # Persistent volume for Grafana
+  prometheus_data:
+    driver: local  # Persistent volume for Prometheus
+  loki_data:
+    driver: local  # Persistent volume for Loki
+
 services:
   loki:
     image: grafana/loki:latest
@@ -11,6 +19,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
+      - loki_data:/loki
       - ./loki:/etc/loki
     command: -config.file=/etc/loki/loki-config.yaml
     networks:
@@ -32,6 +41,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      - grafana_data:/var/lib/grafana
       - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
     networks:
       - monitoring
@@ -41,6 +51,7 @@ services:
     container_name: prometheus
     platform: linux/amd64
     volumes:
+      - prometheus_data:/prometheus 
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
