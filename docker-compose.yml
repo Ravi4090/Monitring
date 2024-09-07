@@ -2,6 +2,7 @@ version: "3"
 
 networks:
   monitoring:
+    name: monitoring
     driver: bridge
 
 volumes:
@@ -55,6 +56,8 @@ services:
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    networks:
+      - monitoring
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor-amd64:v0.50.0
