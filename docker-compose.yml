@@ -7,10 +7,13 @@ networks:
 
 volumes:
   grafana_data:
+    name: grafana_data
     driver: local  # Persistent volume for Grafana
   prometheus_data:
+    name: prometheus_data
     driver: local  # Persistent volume for Prometheus
   loki_data:
+    name: loki_data
     driver: local  # Persistent volume for Loki
 
 services:
