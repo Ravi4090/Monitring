@@ -10,14 +10,14 @@ scrape_configs:
     static_configs:
       - targets: 
         - 'node-exporter:9100'
-        - '54.221.188.251:9100'
-        - '3.91.27.225:9100'
-        - '172.31.18.188:9100'
+        - '<SERVER_ONE_IP>:9100'
+        - '<SERVER_TWO_IP>:9100'
+        - '<SERVER_THREE_IP>:9100'
 
   - job_name: 'cadvisor'
     static_configs:
       - targets: 
         - 'cadvisor:8080'
-        - '54.221.188.251:8080'
-        - '3.91.27.225:8080'
-        - '172.31.18.188:8080'
+        - '<SERVER_ONE_IP>:8080'
+        - '<SERVER_TWO_IP>:8080'
+        - '<SERVER_THREE_IP>:8080'
