@@ -36,9 +36,10 @@ Follow these steps to get your monitoring stack up and running:
 
 Start by cloning this repository to your monitoring server.
 
-bash
+```bash
 git clone https://github.com/Ravi4090/promtailloki.git
 cd promtailloki
+```
 
 ### 2. Configure Environment Variables
 Edit the .env file to update the Loki URL and other configurations specific to your environment.
@@ -87,7 +88,7 @@ docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all
 Update the Docker daemon configuration by editing /etc/docker/daemon.json:
 
 ```json
-Copy code
+
 {
   "log-driver": "loki",
   "log-opts": {
@@ -102,18 +103,19 @@ Restart the Docker service to apply the changes:
 sudo systemctl restart docker
 ```
 
+### ⚠️ Note: Restarting Docker will stop all running containers. Plan accordingly before proceeding.
+
 ### 5. Start the Stack
 Once your configurations are ready, start the monitoring stack using Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
-⚠️ Note: Restarting Docker will stop all running containers. Plan accordingly before proceeding.
 
 ### 6. Verify the Setup
 You can verify the setup by accessing Grafana:
 
-Open your browser and navigate to http://<YOUR_MONITORING_SERVER_IP>:3000.
+Open your browser and navigate to ``` http://<YOUR_MONITORING_SERVER_IP>:3000.```
 
 Login with the default credentials:
 Username: admin
