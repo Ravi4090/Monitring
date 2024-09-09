@@ -5,7 +5,4 @@ notifiers:
     settings:
       addresses: 
         - "ravishankarrajupalepu@gmail.com"
-        - "recipient2@example.com"
-        - "recipient3@example.com"
-        - "recipient3@example.com"
     is_default: true
