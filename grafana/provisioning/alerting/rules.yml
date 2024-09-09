@@ -1,1 +1,12 @@
-
+alerting:
+  enabled: true
+  alert_rules:
+    - name: High CPU Usage
+      expr: rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.2
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High CPU Usage"
+        description: "CPU usage on {{ $labels.instance }} is above 80% for more than 1 minute."
+      contact_point: email-contact
