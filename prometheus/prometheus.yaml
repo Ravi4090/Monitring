@@ -12,12 +12,12 @@ scrape_configs:
         - 'node-exporter:9100'
         - '<SERVER_ONE_IP>:9100'
         - '<SERVER_TWO_IP>:9100'
-        - '<SERVER_THREE_IP>:9100'
+       
 
   - job_name: 'cadvisor'
     static_configs:
       - targets: 
-        - 'cadvisor:8080'
-        - '<SERVER_ONE_IP>:8080'
-        - '<SERVER_TWO_IP>:8080'
-        - '<SERVER_THREE_IP>:8080'
+        - 'cadvisor:8081'
+        - '<SERVER_ONE_IP>:8081'
+        - '<SERVER_TWO_IP>:8081'
+        
