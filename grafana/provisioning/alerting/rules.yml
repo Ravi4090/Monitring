@@ -1,12 +1,15 @@
 alerting:
   enabled: true
   alert_rules:
-    - name: High CPU Usage
-      expr: rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.2
-      for: 1m
+    - name: Stopped Containers Greater than 0
+      expr: count(container_last_seen{instance=~".*", image!=""}) - count(container_start_time_seconds{instance=~".*", image!=""}) > 0
+      for: 1s
+      evaluation_interval: 10s  # Ensure alerts are evaluated every 10 seconds
       labels:
+        team: monitoring
         severity: critical
       annotations:
-        summary: "High CPU Usage"
-        description: "CPU usage on {{ $labels.instance }} is above 80% for more than 1 minute."
+        summary: "Stopped Containers Alert"
+        description: "The number of stopped containers is greater than 0. This indicates that there are containers that were running but have stopped. Please check the container status and logs."
       contact_point: email-contact
+
