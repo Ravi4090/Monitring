@@ -118,8 +118,9 @@ You can verify the setup by accessing Grafana:
 Open your browser and navigate to ``` http://<YOUR_MONITORING_SERVER_IP>:3000.```
 
 Login with the default credentials:
-Username: admin
-Password: admin
+
+- Username: admin
+- Password: admin
 
 ### 7. Import Dashboards
    
@@ -127,15 +128,15 @@ The setup will not have pre-configured dashboards automatically. However, you ca
 
 - **Node Exporter Full**: ID 1860
 - **cAdvisor Exporter**: ID 14282
-- **Docker Monitoring **: ID 15798
+- **Docker Monitoring**: ID 15798
 
 To import these dashboards:
 
 Go to the Grafana dashboard.
 
-Click on the "+" icon on the left side and choose "Import."
-Enter the dashboard ID and click "Load."
-Select the appropriate data source (Prometheus or Loki) and import the dashboard.
+- Click on the "+" icon on the left side and choose "Import."
+- Enter the dashboard ID and click "Load."
+- Select the appropriate data source (Prometheus or Loki) and import the dashboard.
 
 ### Conclusion
 This monitoring stack provides a flexible and powerful way to monitor and log metrics across multiple servers and containers. With Prometheus, Loki, and Grafana, you can easily scale and visualize your data in real time.
