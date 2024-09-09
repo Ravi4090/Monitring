@@ -141,5 +141,5 @@ Go to the Grafana dashboard.
 ### Conclusion
 This monitoring stack provides a flexible and powerful way to monitor and log metrics across multiple servers and containers. With Prometheus, Loki, and Grafana, you can easily scale and visualize your data in real time.
 
-Future Enhancements
-- **Alerting**: Set up alerting rules in Prometheus and configure Alertmanager to receive notifications (email, Slack, etc.) when conditions are met.
+### Future Enhancements
+- **Alerting**: Set up alerting rules in Grafana and configure Grafana Alertmanager to receive notifications (email, Slack, etc.) when conditions are met.
