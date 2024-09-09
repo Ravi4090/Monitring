@@ -125,9 +125,9 @@ Password: admin
    
 The setup will not have pre-configured dashboards automatically. However, you can import some great dashboards for monitoring your environment:
 
-Node Exporter Full: ID 1860
-cAdvisor Exporter: ID 14282
-Docker Monitoring: ID 15798
+- **Node Exporter Full**: ID 1860
+- **cAdvisor Exporter**: ID 14282
+- **Docker Monitoring **: ID 15798
 
 To import these dashboards:
 
@@ -141,6 +141,4 @@ Select the appropriate data source (Prometheus or Loki) and import the dashboard
 This monitoring stack provides a flexible and powerful way to monitor and log metrics across multiple servers and containers. With Prometheus, Loki, and Grafana, you can easily scale and visualize your data in real time.
 
 Future Enhancements
-Alerting: Set up alerting rules in Prometheus and configure Alertmanager to receive notifications (email, Slack, etc.) when conditions are met.
-Security: Secure the Grafana dashboard by configuring SSL, adding OAuth or LDAP authentication for access control.
-Custom Dashboards: Customize Grafana dashboards to suit specific business metrics or infrastructure components.
+- **Alerting**: Set up alerting rules in Prometheus and configure Alertmanager to receive notifications (email, Slack, etc.) when conditions are met.
