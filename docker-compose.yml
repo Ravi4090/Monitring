@@ -1,4 +1,3 @@
-
 networks:
   monitoring:
     name: monitoring
@@ -7,13 +6,13 @@ networks:
 volumes:
   grafana_data:
     name: grafana_data
-    driver: local  # Persistent volume for Grafana
+    driver: local
   prometheus_data:
     name: prometheus_data
-    driver: local  # Persistent volume for Prometheus
+    driver: local
   loki_data:
     name: loki_data
-    driver: local  # Persistent volume for Loki
+    driver: local
 
 services:
   loki:
@@ -33,7 +32,7 @@ services:
     container_name: promtail
     volumes:
       - /var/log:/var/log
-      - ./promtail:/etc/promtail 
+      - ./promtail:/etc/promtail
     command: -config.file=/etc/promtail/promtail-config.yaml
     networks:
       - monitoring
@@ -44,10 +43,14 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/provisioning/alerting/rules.yml:/etc/grafana/provisioning/alerting/rules.yml
+      - ./grafana/provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./grafana/provisioning/datasources/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./grafana/provisioning/notifiers/contacts.yml:/etc/grafana/provisioning/notifiers/contacts.yml
+      
+      # Other Grafana files
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboards:/etc/grafana/dashboards
-      - grafana_data:/var/lib/grafana
     networks:
       - monitoring
   
@@ -56,7 +59,7 @@ services:
     container_name: prometheus
     platform: linux/amd64
     volumes:
-      - prometheus_data:/prometheus 
+      - prometheus_data:/prometheus
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
@@ -86,16 +89,3 @@ services:
       - "9100:9100"
     networks:
       - monitoring
-
-
-  alpine-test:
-    image: alpine
-    container_name: alpine-test
-    logging:
-      driver: loki
-      options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
-    command: sh -c "while true; do echo 'Alpine Test Log'; sleep 5; done"
-    networks:
-      - monitoring
-
