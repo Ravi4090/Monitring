@@ -3,8 +3,8 @@ alerting:
   alert_rules:
     - name: Stopped Containers Greater than 0
       expr: count(container_last_seen{instance=~".*", image!=""}) - count(container_start_time_seconds{instance=~".*", image!=""}) > 0
-      for: 1s
-      evaluation_interval: 10s  # Ensure alerts are evaluated every 10 seconds
+      for: 10s
+      evaluation_interval: 10s
       labels:
         team: monitoring
         severity: critical
@@ -13,3 +13,51 @@ alerting:
         description: "The number of stopped containers is greater than 0. This indicates that there are containers that were running but have stopped. Please check the container status and logs."
       contact_point: email-contact
 
+    - name: High Container CPU Usage
+      expr: sum(rate(container_cpu_usage_seconds_total{instance=~".*", name=~".*", name=~".+"}[5m])) by (name) * 100 > 75
+      for: 10s
+      evaluation_interval: 10s
+      labels:
+        team: monitoring
+        severity: critical
+      annotations:
+        summary: "High Container CPU Usage Alert"
+        description: "The CPU usage for one or more containers is above 75% for the past 5 minutes. This indicates high CPU consumption that might affect performance. Please investigate the containers with high CPU usage."
+      contact_point: email-contact
+
+    - name: High Container Memory Usage
+      expr: sum(container_memory_rss{instance=~".*", name=~".*", name=~".+"}) by (name) > 80
+      for: 10s
+      evaluation_interval: 10s
+      labels:
+        team: monitoring
+        severity: critical
+      annotations:
+        summary: "High Container Memory Usage Alert"
+        description: "The memory usage for one or more containers is above 80 units. This indicates that containers are consuming a high amount of memory, which may affect their performance. Please investigate the containers with high memory usage."
+      contact_point: email-contact
+
+    - name: High Container Memory Cached
+      expr: sum(container_memory_cache{instance=~".*", name=~".*", name=~".+"}) by (name) > 80
+      for: 10s
+      evaluation_interval: 10s
+      labels:
+        team: monitoring
+        severity: critical
+      annotations:
+        summary: "High Container Memory Cached Alert"
+        description: "The cached memory for one or more containers is above 80 units. This indicates high memory caching, which might affect overall performance. Please review the containers' memory cache usage."
+      contact_point: email-contact
+
+      - name: High Container Network Traffic Received
+      expr: sum(rate(container_network_receive_bytes_total{instance=~".*", name=~".*", name=~".+"}[5m])) by (name) > 80
+      for: 10s
+      evaluation_interval: 10s
+      labels:
+        team: monitoring
+        severity: critical
+      annotations:
+        summary: "High Container Network Traffic Received Alert"
+        description: "The received network traffic for one or more containers is above 80 units over the past 5 minutes. This indicates high network traffic which might affect performance. Please investigate the network usage of the containers."
+        runbook_url: "http://your-runbook-url.com"
+      contact_point: email-contact
