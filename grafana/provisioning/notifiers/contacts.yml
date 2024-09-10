@@ -1,8 +1,0 @@
-notifiers:
-  - name: Email
-    type: email
-    uid: email-contact
-    settings:
-      addresses: 
-        - "ravishankarrajupalepu@gmail.com"
-    is_default: true
