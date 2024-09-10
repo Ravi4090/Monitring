@@ -1,0 +1,19 @@
+apiVersion: 1
+contactPoints:
+    - orgId: 1
+      name: Team Email
+      receivers:
+        - uid: fdxg87nrs3doha
+          type: email
+          settings:
+            addresses: rajupalepuravishankar@gmail.com
+            singleEmail: false
+          disableResolveMessage: false
+    - orgId: 1
+      name: email receiver
+      receivers:
+        - uid: bdxg87nrs3dogd
+          type: email
+          settings:
+            addresses: <example@email.com>
+          disableResolveMessage: false
