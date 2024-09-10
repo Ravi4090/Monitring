@@ -1,63 +1,244 @@
-alerting:
-  enabled: true
-  alert_rules:
-    - name: Stopped Containers Greater than 0
-      expr: count(container_last_seen{instance=~".*", image!=""}) - count(container_start_time_seconds{instance=~".*", image!=""}) > 0
-      for: 10s
-      evaluation_interval: 10s
-      labels:
-        team: monitoring
-        severity: critical
-      annotations:
-        summary: "Stopped Containers Alert"
-        description: "The number of stopped containers is greater than 0. This indicates that there are containers that were running but have stopped. Please check the container status and logs."
-      contact_point: email-contact
-
-    - name: High Container CPU Usage
-      expr: sum(rate(container_cpu_usage_seconds_total{instance=~".*", name=~".*", name=~".+"}[5m])) by (name) * 100 > 75
-      for: 10s
-      evaluation_interval: 10s
-      labels:
-        team: monitoring
-        severity: critical
-      annotations:
-        summary: "High Container CPU Usage Alert"
-        description: "The CPU usage for one or more containers is above 75% for the past 5 minutes. This indicates high CPU consumption that might affect performance. Please investigate the containers with high CPU usage."
-      contact_point: email-contact
-
-    - name: High Container Memory Usage
-      expr: sum(container_memory_rss{instance=~".*", name=~".*", name=~".+"}) by (name) > 80
-      for: 10s
-      evaluation_interval: 10s
-      labels:
-        team: monitoring
-        severity: critical
-      annotations:
-        summary: "High Container Memory Usage Alert"
-        description: "The memory usage for one or more containers is above 80 units. This indicates that containers are consuming a high amount of memory, which may affect their performance. Please investigate the containers with high memory usage."
-      contact_point: email-contact
-
-    - name: High Container Memory Cached
-      expr: sum(container_memory_cache{instance=~".*", name=~".*", name=~".+"}) by (name) > 80
-      for: 10s
-      evaluation_interval: 10s
-      labels:
-        team: monitoring
-        severity: critical
-      annotations:
-        summary: "High Container Memory Cached Alert"
-        description: "The cached memory for one or more containers is above 80 units. This indicates high memory caching, which might affect overall performance. Please review the containers' memory cache usage."
-      contact_point: email-contact
-
-    - name: High Container Network Traffic Received
-      expr: sum(rate(container_network_receive_bytes_total{instance=~".*", name=~".*", name=~".+"}[5m])) by (name) > 80
-      for: 10s
-      evaluation_interval: 10s
-      labels:
-        team: monitoring
-        severity: critical
-      annotations:
-        summary: "High Container Network Traffic Received Alert"
-        description: "The received network traffic for one or more containers is above 80 units over the past 5 minutes. This indicates high network traffic which might affect performance. Please investigate the network usage of the containers."
-        runbook_url: "http://your-runbook-url.com"
-      contact_point: email-contact
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Evaluate every 10s
+      folder: Ten Seconds Evalauation group
+      interval: 10s
+      rules:
+        - uid: fdxg8czrp4mioe
+          title: Stopped containers Greater than 0
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 21600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                datasource:
+                    type: prometheus
+                    uid: prometheus
+                editorMode: code
+                exemplar: false
+                expr: "count(container_last_seen{instance=~\".*\", image!=\"\"}) - count(container_start_time_seconds{instance=~\".*\", image!=\"\"})\r\n"
+                instant: true
+                interval: ""
+                intervalFactor: 2
+                intervalMs: 300000
+                legendFormat: ""
+                maxDataPoints: 100
+                metric: container_last_seen
+                range: false
+                refId: A
+                step: 240
+            - refId: C
+              relativeTimeRange:
+                from: 21600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          dashboardUid: pMEd7m0Mz
+          panelId: 21
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          annotations:
+            __dashboardUid__: pMEd7m0Mz
+            __panelId__: "21"
+            description: Immediate Action Required
+            summary: Some of the Containers are Down
+          labels:
+            Team: Monitoring
+          isPaused: false
+        - uid: bdxg8v8vk1534f
+          title: CPU Usage Greater Than 80%
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 21600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                datasource:
+                    type: prometheus
+                    uid: prometheus
+                expr: sum(rate(container_cpu_usage_seconds_total{instance=~".*",name=~".*",name=~".+"}[5m])) by (name) *100
+                interval: ""
+                intervalMs: 15000
+                legendFormat: '{{name}}'
+                maxDataPoints: 43200
+                refId: A
+            - refId: B
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: max
+                refId: B
+                type: reduce
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 80
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          dashboardUid: pMEd7m0Mz
+          panelId: 15
+          noDataState: NoData
+          execErrState: Error
+          for: 20s
+          annotations:
+            __dashboardUid__: pMEd7m0Mz
+            __panelId__: "15"
+            description: Need Immediate Attention to The CPU resources of the Containers
+            summary: Containers CPU Usage is Morethan 80% for more than 20s
+          labels:
+            Team: Monitoring
+          isPaused: false
+        - uid: adxga8t11n280a
+          title: Memory Usage Greater than 80MB
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 21600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                datasource:
+                    type: prometheus
+                    uid: prometheus
+                editorMode: code
+                expr: "sum(container_memory_rss{instance=~\".*\",name=~\".*\",name=~\".+\"}) by (name) / 1024 / 1024 \r\n"
+                instant: true
+                interval: ""
+                intervalMs: 15000
+                legendFormat: '{{name}}'
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 21600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: max
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 21600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 80
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+    
+          noDataState: NoData
+          execErrState: Error
+          for: 20s
+          annotations:
+            description: Need Attention to Container Memory Resources , Memory of Some Containers is Greater Than 80 MB
+            summary: Memory of Some Containers is Greater Than 80 MB
+          labels:
+            Team: Monitoring
+          isPaused: false
