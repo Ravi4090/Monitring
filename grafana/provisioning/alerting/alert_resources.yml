@@ -1,0 +1,35 @@
+apiVersion: 1
+
+contactPoints:
+    - orgId: 1
+      name: Monitoring Team
+      receivers:
+        - uid: bdxghxn0i5iptd
+          type: email
+          settings:
+            addresses: |-
+                ravishankarrajupalepu@gmail.com
+                rajupalepuravishankar@gmail.com
+            singleEmail: false
+          disableResolveMessage: false
+    - orgId: 1
+      name: email receiver
+      receivers:
+        - uid: cdxghxn0i5ipsa
+          type: email
+          settings:
+            addresses: <example@email.com>
+          disableResolveMessage: false
+
+policies:
+    - orgId: 1
+      receiver: Monitoring Team
+      group_by:
+        - grafana_folder
+        - alertname
+      routes:
+        - receiver: Monitoring Team
+          object_matchers:
+            - - Team
+              - =
+              - Monitoring
