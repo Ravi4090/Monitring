@@ -51,6 +51,7 @@ services:
       # Other Grafana files
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboards:/etc/grafana/dashboards
+      - grafana_data:/var/lib/grafana
     networks:
       - monitoring
   
